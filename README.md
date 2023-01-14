@@ -1,3 +1,3 @@
-# tms-07-tapguesture-views
+# Tapguesture views (TMS, hometask 07)
 
 Views with random dinamic appearence by the tapGuestureRecognizers
