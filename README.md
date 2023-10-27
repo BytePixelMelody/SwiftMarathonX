@@ -3,7 +3,7 @@
   <table>
     <tr>
       <td>
-        <img src="Media/SMLogo.png" alt="Swift Matathon Logo">
+        <img src="Media/SMLogo.png" alt="Swift Matathon Logo" width="150">
       </td>
       <td>
         <h1><a href="https://swiftmarathon.devrush.ru">Swift Matathon X</a></h1>
