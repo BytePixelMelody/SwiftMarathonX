@@ -12,12 +12,19 @@
     </tr>
   </table>
 
-## Technologies
+## Frameworks
 - [x] UIKit
+- [x] AVFoundation
+
+## Technologies
 - [x] Storyboards
+- [x] UI by code
+
+## Code patterns
+- [x] Delegates
 
 ## Screenshots
-<img src="Media/IAmRich.png" width="273"/> <img src="Media/IAmPoor.png" width="273"/> <img src="Media/Dicee.png" width="273"/> <img src="Media/MagicBall.png" width="273"/> <img src="Media/Calculator.png" width="273"/>
+<img src="Media/IAmRich.png" width="273"/> <img src="Media/IAmPoor.png" width="273"/> <img src="Media/Dicee.png" width="273"/> <img src="Media/MagicBall.png" width="273"/> <img src="Media/Calculator.png" width="273"/> <img src="Media/Xylophone.png" width="273"/>
 
 ## Contact me
 [LinkedIn](https://www.linkedin.com/in/bytepixelmelody "https://www.linkedin.com/in/bytepixelmelody") | [Telegram](https://t.me/bytepixelmelody "@bytepixelmelody") | [Email](mailto:bytepixelmelody@gmail.com "bytepixelmelody@gmail.com")
