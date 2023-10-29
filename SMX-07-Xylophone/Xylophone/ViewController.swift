@@ -18,6 +18,11 @@ class ViewController: UIViewController {
         static let soundDirectory = "Sounds"
         static let sounds = ["1": "C", "2": "D", "3": "E", "4": "F", "5": "G", "6": "A", "7": "B"]
         static let soundType = "wav"
+        static let playerVolume: Float = 0.9
+        static let halfAlpha: CGFloat = 0.5
+        static let fullAlpha: CGFloat = 1.0
+        static let alphaAnimationDuration = 0.4
+        static let alphaAnimationDelay = 0.0
     }
     
     // MARK: Private Properties
@@ -75,7 +80,7 @@ class ViewController: UIViewController {
             
             player = try AVAudioPlayer(contentsOf: url)
             player?.delegate = self
-            player?.volume = 0.9
+            player?.volume = Constants.playerVolume
             player?.prepareToPlay()
             player?.play()
         } catch {
@@ -84,10 +89,14 @@ class ViewController: UIViewController {
     }
     
     private func blinkTap(on button: UIButton) {
-        button.alpha = 0.5
+        button.alpha = Constants.halfAlpha
         
-        UIView.animate(withDuration: 0.4, delay: 0, options: .allowUserInteraction) {
-            button.alpha = 1
+        UIView.animate(
+            withDuration: Constants.alphaAnimationDuration,
+            delay: Constants.alphaAnimationDelay,
+            options: .allowUserInteraction
+        ) {
+            button.alpha = Constants.fullAlpha
         }
     }
     
@@ -96,6 +105,7 @@ class ViewController: UIViewController {
 // MARK: - AVAudioPlayerDelegate
 
 extension ViewController: AVAudioPlayerDelegate {
+    // for previous playback volume
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         do {
             // deactivate AVAudioSession after audio playback
