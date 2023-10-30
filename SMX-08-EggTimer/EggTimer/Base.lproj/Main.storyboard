@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -133,10 +132,11 @@
                                                 <subviews>
                                                     <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CMe-sr-m5a">
                                                         <rect key="frame" x="36" y="37" width="289" height="6"/>
-                                                        <color key="tintColor" red="0.74117648599999997" green="0.59215688710000003" blue="0.22745099660000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="6" id="083-Wb-AXF"/>
                                                         </constraints>
+                                                        <color key="progressTintColor" red="0.74117647058823533" green="0.59215686274509804" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                     </progressView>
                                                 </subviews>
                                                 <constraints>
@@ -165,6 +165,7 @@
                     <connections>
                         <outlet property="progressView" destination="CMe-sr-m5a" id="jJy-6t-JY5"/>
                         <outlet property="timerLabel" destination="D2l-tJ-JxD" id="p03-jA-XAe"/>
+                        <outlet property="titleLabel" destination="XLm-5r-pSP" id="4eq-11-Ob9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

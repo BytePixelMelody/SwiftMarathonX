@@ -15,12 +15,14 @@ class ViewController: UIViewController {
     
     private enum Constants {
         static let timers: [String: Float] = ["softButton": 300.0, "mediumButton": 420.0, "hardButton": 700.0]
+        static let eggsHardnesses: [String: String] = ["softButton": "Soft", "mediumButton": "Medium", "hardButton": "Hard"]
         
         static let fullProgress: Float = 1.0
         static let timerInterval: Float = 1.0
         static let timerTolerance = 0.1
         
         static let questionText = "How do you like your eggs?"
+        static let cookingText = " egg will cook in"
         static let readyText = "Ready!"
         
         static let soundName = "alarm_sound"
@@ -30,19 +32,15 @@ class ViewController: UIViewController {
     
     // MARK: IBOutlet
     
+    @IBOutlet var titleLabel: UILabel!
     @IBOutlet var timerLabel: UILabel!
     @IBOutlet var progressView: UIProgressView!
 
     // MARK: Private Properties
     
-    private var timerTask: Task<Void, Error>?
+    private var timerTask = Task<Void, Error> { }
     private lazy var timer = Timer()
-    private lazy var dateComponentsFormatter = {
-        let dateComponentsFormatter = DateComponentsFormatter()
-        dateComponentsFormatter.allowedUnits = [.hour, .minute, .second]
-        dateComponentsFormatter.unitsStyle = .positional
-        return dateComponentsFormatter
-    }()
+    private lazy var dateComponentsFormatter = makeDateComponentsFormatter()
     
     var player: AVAudioPlayer?
     
@@ -56,18 +54,21 @@ class ViewController: UIViewController {
 
     @IBAction func hardnessSelected(_ sender: UIButton) {
         guard let restorationIdentifier = sender.restorationIdentifier,
-              let seconds = Constants.timers[restorationIdentifier]
+              let seconds = Constants.timers[restorationIdentifier],
+              let eggHardness = Constants.eggsHardnesses[restorationIdentifier]
         else {
+            print("Nil found in restorationIdentifier, or seconds, or eggHardness")
             return
         }
         
         setTaskTimer(for: seconds)
+        titleLabel.text = eggHardness + Constants.cookingText
     }
     
     // MARK: Private Methods
     
     private func setTaskTimer(for totalSeconds: Float) {
-        timerTask?.cancel()
+        timerTask.cancel()
         
         timerTask = Task { [self] in
             var currentSeconds = totalSeconds
@@ -76,7 +77,7 @@ class ViewController: UIViewController {
             await setBarProgress(current: currentSeconds, total: totalSeconds, animated: false)
 
             while currentSeconds > .zero {
-                guard let timerTask, !timerTask.isCancelled else { return }
+                guard !timerTask.isCancelled else { return }
 
                 await setLabelProgress(seconds: currentSeconds)
                 await setBarProgress(current: currentSeconds, total: totalSeconds, animated: true)
@@ -86,9 +87,10 @@ class ViewController: UIViewController {
                 let sleepSeconds = Double(Constants.timerInterval)
                 try await Task.sleep(for: .seconds(sleepSeconds))
             }
+            playSound()
             await setLabelProgress(seconds: currentSeconds)
             await setBarProgress(current: currentSeconds, total: totalSeconds, animated: true)
-            playSound()
+            timerTask.cancel()
         }
     }
     
@@ -134,7 +136,14 @@ class ViewController: UIViewController {
         }
     }
     
-    // MARK: by Angela
+    private func makeDateComponentsFormatter() -> DateComponentsFormatter {
+        let dateComponentsFormatter = DateComponentsFormatter()
+        dateComponentsFormatter.allowedUnits = [.hour, .minute, .second]
+        dateComponentsFormatter.unitsStyle = .positional
+        return dateComponentsFormatter
+    }
+    
+    // MARK: Timer by Angela
     
     private func setStrictTimer(for seconds: Float) {
         timerLabel.text = Constants.questionText
@@ -148,10 +157,9 @@ class ViewController: UIViewController {
         // replace old Timer by new one
         timer = Timer.scheduledTimer(withTimeInterval: Double(Constants.timerInterval), repeats: true, block: { [self] timer in
             if currentSeconds > .zero {
+                currentSeconds -= Constants.timerInterval
                 let progress = currentSeconds / seconds
                 progressView.setProgress(progress, animated: true)
-                
-                currentSeconds -= Constants.timerInterval
             } else {
                 progressView.setProgress(.zero, animated: true)
                 timerLabel.text = Constants.readyText
@@ -160,22 +168,24 @@ class ViewController: UIViewController {
         })
         
         timer.tolerance = Constants.timerTolerance
-        timer.fire()
     }
     
 }
 
 extension ViewController: AVAudioPlayerDelegate {
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        // clean text
-        timerLabel.text = nil
-        
         // deactivate AVAudioSession
         do {
             // deactivate AVAudioSession after audio playback
             try AVAudioSession.sharedInstance().setActive(false)
         } catch {
             print(error)
+        }
+        
+        if timerTask.isCancelled {
+            // clean text
+            timerLabel.text = nil
+            titleLabel.text = Constants.questionText
         }
     }
 }
